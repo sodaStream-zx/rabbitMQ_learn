@@ -1,0 +1,17 @@
+ex:
+  EXCHANGE_NAME: spring_rb_exchange
+  QUEUE_NAME: spring_rb_queue
+  ROUNTING_KEY: spring
+  IP_ADDRESS: localhost
+queue:
+  QUEUE_NAME: spring_rb_queue
+  ROUNTING_KEY: spring
+spring:
+  rabbitmq:
+    username: admin
+    password: admin
+    virtual-host: spring_rabbit
+    publisher-returns: true
+    publisher-confirms: true
+    template:
+      mandatory: true
