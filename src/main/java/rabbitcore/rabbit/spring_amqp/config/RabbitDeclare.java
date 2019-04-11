@@ -30,6 +30,9 @@ public class RabbitDeclare {
     @Autowired
     private RabbitAdmin rabbitAdmin;
 
+    public RabbitDeclare() {
+    }
+
     public void myDeclareExchange() {
         //申明交换机
         rabbitAdmin.declareExchange(new DirectExchange(EXCHANGE_NAME + "_direct", true, false, null));

@@ -13,9 +13,9 @@ import java.util.concurrent.TimeoutException;
  * @createTime 2018-12-15-0:44
  */
 public class Myconsumer {
-    private static final String EXCHANGE_NAME = "rc_exchange";
-    private static final String QUEUE_NAME = "rc_queue";
-    private static final String IP_ADDRESS = "localhost";
+    private static final String EXCHANGE_NAME = "simple_exchange";
+    private static final String QUEUE_NAME = "simple_queue";
+    private static final String IP_ADDRESS = "10.253.90.20";
     private static Integer PORT = 5672;
     private static final Logger LOG = Logger.getLogger(Myconsumer.class);
 
@@ -25,7 +25,7 @@ public class Myconsumer {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setUsername("admin");
         factory.setPassword("admin");
-        factory.setVirtualHost("rabbitclient");
+        factory.setVirtualHost("yunce");
 
         try {
 
@@ -37,7 +37,8 @@ public class Myconsumer {
             channel.basicQos(5);
             //自动确认消息已被消费 autoACK = false
             // channel.basicConsume(QUEUE_NAME, false, "Myconsumer", true, false, null, new ConsumerObj(channel));
-            for (int i = 0; i < 20; i++) {
+//            for (int i = 0; i < 20; i++) {
+            while (true) {
                 GetResponse message = channel.basicGet(QUEUE_NAME, false);
                 if (message == null) {
                     break;

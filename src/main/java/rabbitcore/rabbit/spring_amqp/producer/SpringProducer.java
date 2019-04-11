@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import rabbitcore.rabbit.spring_amqp.config.RabbitDeclare;
 import rabbitcore.rabbit.spring_amqp.entity.User;
 
 import java.util.concurrent.TimeUnit;
@@ -23,18 +24,23 @@ public class SpringProducer {
     private static final Logger LOG = Logger.getLogger(SpringProducer.class);
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
+    @Autowired
+    private RabbitDeclare rabbitDeclare;
     @Autowired
     private SimpleMessageListenerContainer simpleMessageListenerContainer;
 
     //发送消息
     public void sendMessage() {
+        rabbitDeclare.myDeclareExchange();
+        rabbitDeclare.myDeclareQueue();
+        rabbitDeclare.myDeclareBinding();
         MessageProperties messageProperties = new MessageProperties();
         messageProperties.getHeaders().put("desc", "send a message");
         messageProperties.getHeaders().put("type", 10);
         //tet
         messageProperties.setContentType("application/json");
-        for (int i = 0; i < 10; i++) {
+//        for (int i = 0; i < 10; i++) {
+        while (true) {
             //创建对象并序列化为json
             User user = new User(1, "zxx", "12345");
             ObjectMapper objectMapper = new ObjectMapper();

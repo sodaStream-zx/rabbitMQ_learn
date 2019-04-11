@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -22,9 +23,9 @@ public class SimpleProducer {
     private static final String EXCHANGE_NAME = "simple_exchange";
     private static final String ROUTING_KEY = "simple_key";
     private static final String QUEUE_NAME = "simple_queue";
-    private static final String IP_ADDRESS = "localhost";
+    private static final String IP_ADDRESS = "10.253.90.20";
     private static final Integer PORT = 5672;
-    private static final String VIRTUAL_Host = "springcloudhost";
+    private static final String VIRTUAL_Host = "yunce";
     private static final String uri = "amqp://admin:admin" + "@" + IP_ADDRESS + ":" + PORT + "/" + VIRTUAL_Host;
 
     //获取连接
@@ -70,7 +71,7 @@ public class SimpleProducer {
     }
 
     //发送消息
-    public static void publishMessage() {
+    public static void publishMessage() throws IOException, InterruptedException {
         Connection connection = getConnection();
         Channel channel = initExchangeAndQueue(connection);
         try {
@@ -82,7 +83,8 @@ public class SimpleProducer {
         AMQP.BasicProperties.Builder myBasicProperties = new AMQP.BasicProperties().builder();
         AMQP.BasicProperties properties = myBasicProperties.contentType("text/plain").deliveryMode(2).priority(1).userId("admin").build();
         LOG.info("消息properties == " + myBasicProperties.toString());
-        try {
+//        try {
+        while (true) {
             channel.basicPublish(EXCHANGE_NAME, "aa", properties, "hello Simple string".getBytes());
             if (!channel.waitForConfirms()) {
                 LOG.error("send message failed");
@@ -101,18 +103,21 @@ public class SimpleProducer {
             } else {
                 LOG.info("send message successed");
             }
-            channel.close();
-            connection.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            TimeUnit.SECONDS.sleep(1);
+//        }
+//            channel.close();
+////            connection.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (TimeoutException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
         }
+
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         publishMessage();
     }
 }

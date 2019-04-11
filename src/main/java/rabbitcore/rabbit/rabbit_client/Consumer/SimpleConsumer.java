@@ -23,9 +23,9 @@ public class SimpleConsumer {
     private static final String EXCHANGE_NAME = "simple_exchange";
     private static final String ROUTING_KEY = "simple_key";
     private static final String QUEUE_NAME = "simple_queue";
-    private static final String IP_ADDRESS = "localhost";
+    private static final String IP_ADDRESS = "10.253.90.20";
     private static final Integer PORT = 5672;
-    private static final String VIRTUAL_Host = "springcloudhost";
+    private static final String VIRTUAL_Host = "yunce";
     private static final String uri = "amqp://admin:admin" + "@" + IP_ADDRESS + ":" + PORT + "/" + VIRTUAL_Host;
 
     //设置消费者信息
@@ -61,6 +61,7 @@ public class SimpleConsumer {
 
     public static void publishMeaage(Connection con) throws IOException {
         Channel channel = con.createChannel(2);
+        //循环取值
         channel.basicQos(1);
         channel.basicConsume(QUEUE_NAME, false, "SIMPLE_CONSUMER", new DefaultConsumer(channel) {
             @Override
@@ -71,7 +72,7 @@ public class SimpleConsumer {
                         + "\nproperties = " + properties
                         + "\nmessage = " + new String(body)
                         + "\n------------------");
-                channel.basicAck(envelope.getDeliveryTag(), false);
+                channel.basicAck(envelope.getDeliveryTag(), true);
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {

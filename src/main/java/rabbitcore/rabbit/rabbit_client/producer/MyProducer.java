@@ -21,9 +21,9 @@ public class MyProducer {
     private static final String EXCHANGE_NAME = "rc_exchange";
     private static final String ROUTING_KEY = "routingkey_rc";
     private static final String QUEUE_NAME = "rc_queue";
-    private static final String IP_ADDRESS = "localhost";
+    private static final String IP_ADDRESS = "10.253.90.20";
     private static final Integer PORT = 5672;
-    private static final String VIRTUAL_Host = "rabbitclient";
+    private static final String VIRTUAL_Host = "yunce";
     private static SortedSet<Long> confiemSet = Collections.synchronizedSortedSet(new TreeSet<>());
 
     /**
@@ -113,8 +113,9 @@ public class MyProducer {
             //设置确认返回
             MyProducer.setAckSet(channel);
             int count = 0;
-            while (count < 20) {
-                //设置消息发送失败返回
+//            while (count < 20) {
+            //设置消息发送失败返回
+            while (true) {
                 MyProducer.setReturnMessage(channel);
                 long nextSeqNo = channel.getNextPublishSeqNo();
                 //设置消息properties
@@ -134,7 +135,6 @@ public class MyProducer {
                     count++;
                 } catch (Exception e) {
                     LOG.info("发送结果 成功delivery ：" + confiemSet);
-
                     break;
                 }
                 //channel.basicPublish(EXCHANGE_NAME, "", true, mybasicProperties, ("wrong_rountingkey_test_message" + i).getBytes());
