@@ -2,7 +2,7 @@ ex:
   EXCHANGE_NAME: spring_rb_exchange
   QUEUE_NAME: spring_rb_queue
   ROUNTING_KEY: spring
-  IP_ADDRESS: 10.253.90.20
+  IP_ADDRESS: ycrabbitmq.dc.zz
 queue:
   QUEUE_NAME: spring_rb_queue
   ROUNTING_KEY: spring
@@ -15,6 +15,6 @@ spring:
     publisher-confirms: true
     template:
       mandatory: true
-    host: 10.253.90.20
+    host: ycrabbitmq.dc.zz
 logging:
   file: /logs/

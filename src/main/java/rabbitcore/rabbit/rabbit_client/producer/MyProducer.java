@@ -21,7 +21,7 @@ public class MyProducer {
     private static final String EXCHANGE_NAME = "rc_exchange";
     private static final String ROUTING_KEY = "routingkey_rc";
     private static final String QUEUE_NAME = "rc_queue";
-    private static final String IP_ADDRESS = "10.253.90.20";
+    private static final String IP_ADDRESS = "ycrabbitmq.dc.zz";
     private static final Integer PORT = 5672;
     private static final String VIRTUAL_Host = "yunce";
     private static SortedSet<Long> confiemSet = Collections.synchronizedSortedSet(new TreeSet<>());

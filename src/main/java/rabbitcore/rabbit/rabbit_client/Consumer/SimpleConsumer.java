@@ -23,7 +23,7 @@ public class SimpleConsumer {
     private static final String EXCHANGE_NAME = "simple_exchange";
     private static final String ROUTING_KEY = "simple_key";
     private static final String QUEUE_NAME = "simple_queue";
-    private static final String IP_ADDRESS = "10.253.90.20";
+    private static final String IP_ADDRESS = "ycrabbitmq.dc.zz";
     private static final Integer PORT = 5672;
     private static final String VIRTUAL_Host = "yunce";
     private static final String uri = "amqp://admin:admin" + "@" + IP_ADDRESS + ":" + PORT + "/" + VIRTUAL_Host;

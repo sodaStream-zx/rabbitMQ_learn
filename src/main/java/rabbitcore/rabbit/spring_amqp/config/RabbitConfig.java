@@ -34,7 +34,7 @@ public class RabbitConfig {
     private String QUEUE_NAME;
     @Value("${queue.ROUNTING_KEY}")
     private String ROUNTING_KEY;
-    private String IP_ADDRESS = "10.253.90.20";
+    private String IP_ADDRESS = "ycrabbitmq.dc.zz";
     private Integer PORT = 5672;
     private String VIRTUAL_Host = "yunce";
     private Integer consumer_num = 0;

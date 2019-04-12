@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -23,7 +25,7 @@ public class SimpleProducer {
     private static final String EXCHANGE_NAME = "simple_exchange";
     private static final String ROUTING_KEY = "simple_key";
     private static final String QUEUE_NAME = "simple_queue";
-    private static final String IP_ADDRESS = "10.253.90.20";
+    private static final String IP_ADDRESS = "ycrabbitmq.dc.zz";
     private static final Integer PORT = 5672;
     private static final String VIRTUAL_Host = "yunce";
     private static final String uri = "amqp://admin:admin" + "@" + IP_ADDRESS + ":" + PORT + "/" + VIRTUAL_Host;
@@ -61,6 +63,13 @@ public class SimpleProducer {
             channel.exchangeDeclarePassive(EXCHANGE_NAME);
             channel.queueDeclarePassive(QUEUE_NAME);
             channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
+            AMQP.Exchange.DeclareOk exchangeOk2 = channel.exchangeDeclare(EXCHANGE_NAME + "_1", "direct", true, false, null);
+            AMQP.Queue.DeclareOk queueOk2 = channel.queueDeclare(QUEUE_NAME + "_1", true, false, false, null);
+            LOG.info("交换机创建成功 == " + exchangeOk2);
+            LOG.info("队列创建成功 == " + queueOk2);
+            channel.exchangeDeclarePassive(EXCHANGE_NAME + "_1");
+            channel.queueDeclarePassive(QUEUE_NAME + "_1");
+            channel.queueBind(QUEUE_NAME + "_1", EXCHANGE_NAME + "_1", ROUTING_KEY + "_1");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,7 +94,7 @@ public class SimpleProducer {
         LOG.info("消息properties == " + myBasicProperties.toString());
 //        try {
         while (true) {
-            channel.basicPublish(EXCHANGE_NAME, "aa", properties, "hello Simple string".getBytes());
+            channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, properties, "hello Simple string".getBytes());
             if (!channel.waitForConfirms()) {
                 LOG.error("send message failed");
             } else {
@@ -97,27 +106,31 @@ public class SimpleProducer {
             } else {
                 LOG.info("send message successed");
             }
-            channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, false, properties, "thank you ,i am fine!!!!".getBytes());
+            channel.basicPublish(EXCHANGE_NAME + "_1", ROUTING_KEY + "_1", false, properties, "thank you ,i am fine!!!!".getBytes());
             if (!channel.waitForConfirms()) {
                 LOG.error("send message faile");
             } else {
                 LOG.info("send message successed");
             }
-            TimeUnit.SECONDS.sleep(1);
-//        }
-//            channel.close();
-////            connection.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (TimeoutException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
+//            TimeUnit.MILLISECONDS.sleep(20);
         }
 
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        publishMessage();
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20, 200, TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<>(5));
+        //线程池满，直接在调用线程中执行该任务
+        for (int i = 0; i < 10; i++) {
+            executor.submit(() -> {
+                try {
+                    publishMessage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }
