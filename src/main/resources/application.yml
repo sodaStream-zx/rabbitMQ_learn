@@ -17,4 +17,4 @@ spring:
       mandatory: true
     host: ycrabbitmq.dc.zz
 logging:
-  file: /logs/
+  file: /logs/log.log

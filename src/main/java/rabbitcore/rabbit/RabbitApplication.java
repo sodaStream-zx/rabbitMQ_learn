@@ -6,6 +6,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import rabbitcore.rabbit.TimeOutQueue.ProProducer;
 import rabbitcore.rabbit.spring_amqp.producer.SpringProducer;
 
 @SpringBootApplication
@@ -15,14 +16,17 @@ public class RabbitApplication implements ApplicationRunner {
     @Autowired
     private SpringProducer springProducer;
 
+    @Autowired
+    private ProProducer proProducer;
     public static void main(String[] args) {
         SpringApplication.run(RabbitApplication.class, args);
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        springProducer.sendMessage();
+        // springProducer.sendMessage();
         //springProducer.reciveMessage();
+        proProducer.sendMessage();
     }
 }
 

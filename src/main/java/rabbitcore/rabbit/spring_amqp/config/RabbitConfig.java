@@ -2,16 +2,9 @@ package rabbitcore.rabbit.spring_amqp.config;
 
 import org.apache.log4j.Logger;
 import org.springframework.amqp.core.AcknowledgeMode;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-import org.springframework.amqp.rabbit.transaction.RabbitTransactionManager;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,26 +42,32 @@ public class RabbitConfig {
         return cachingConnectionFactory;
     }*/
 
-    @Bean
+   /* @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
     }
-
-    @Bean
+*/
+   /* @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
-    }
+    }*/
 
     //自定义rabbitTemplate 取代默认连接 properties
-    @Bean
+    /*@Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         //设置消息转换
         rabbitTemplate.setMessageConverter(messageConverter);
         //设置默认交换机和key
-        rabbitTemplate.setExchange(EXCHANGE_NAME + "_topic");
+        rabbitTemplate.setExchange(EXCHANGE_NAME + "_fanout");
         //rabbitTemplate.setRoutingKey(ROUNTING_KEY + 2);
+        //rabbitTemplate.setChannelTransacted(true);
         rabbitTemplate.setMandatory(true);
+        rabbitTemplate.setConfirmCallback((correlationData, b, s) -> LOG.info(
+                "确认消息：------>return confirm call back "
+                        +"\ncorrelationdata = "+correlationData.toString()
+                        + "\n ack = " + b
+                        + "\ncaused = " + s));
         rabbitTemplate.setReturnCallback((message, i, s, s1, s2) -> LOG.info(
                 "路由到消费者队列失败----》" +
                         "\nmessage=" + message
@@ -77,13 +76,14 @@ public class RabbitConfig {
                         + "\nexchange=" + s1
                         + "\nrountingkey=" + s2));
         return rabbitTemplate;
-    }
+    }*/
 
    /* @Bean
     public RabbitTemplate.ConfirmCallback getConfirmCallback() {
         return (correlationData, b, s) -> LOG.info(correlationData.toString() + "\nb = " + b + "\ns = " + s);
     }*/
 
+    //rabbit -client 消息监听
     @Bean
     public SimpleMessageListenerContainer simpleMessageListenerContainer(ConnectionFactory connectionFactory) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory);
@@ -123,14 +123,15 @@ public class RabbitConfig {
         return container;
     }
 
-    @Bean
+    //spring rabbit 消息监听
+    /*@Bean
     public RabbitListenerContainerFactory<?> rabbitListenerContainerFactory(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);
         factory.setPrefetchCount(5);
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
         factory.setConsumerTagStrategy(s -> s + 1);
-        factory.setTransactionManager(new RabbitTransactionManager(connectionFactory));
         return factory;
-    }
+    }*/
 }
