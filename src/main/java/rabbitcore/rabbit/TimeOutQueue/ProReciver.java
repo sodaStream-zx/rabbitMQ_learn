@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -25,21 +24,19 @@ public class ProReciver {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = "nomal_queue")
-    public void handleMeaage(Message message, Channel channel) throws InterruptedException, IOException {
+    //    @RabbitListener(queues = "nomal_queue")
+    @RabbitListener(queues = {"timeOutRealIdQueue"})
+    public void handleMeaage(Message message, Channel channel) throws IOException {
+
         int count = 1;
         String text = new String(message.getBody());
-        if ("delayMessage".equalsIgnoreCase(text)) {
-            MessageProperties messageProperties = message.getMessageProperties();
-            messageProperties.setExpiration(String.valueOf(count * 100));
-            String ms = new String(message.getBody());
-            Message wrong = new Message((ms + " dddddlay").getBytes(), messageProperties);
-            rabbitTemplate.send("tll_exchange", "delay_key", wrong);
-            channel.basicAck(messageProperties.getDeliveryTag(), false);
-        } else {
-            LOG.info("message = " + text);
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-        }
-        TimeUnit.SECONDS.sleep(1);
+        System.out.println("收到的消息：： " + text + "发送到nomalQueue");
+        MessageProperties messageProperties = message.getMessageProperties();
+        messageProperties.setExpiration(String.valueOf(count * 100));
+        String ms = new String(message.getBody());
+        Message wrong = new Message((ms + " dddddlay").getBytes(), messageProperties);
+        rabbitTemplate.send("tll_exchange", "delay_key", wrong);
+        channel.basicAck(messageProperties.getDeliveryTag(), false);
     }
+//        TimeUnit.SECONDS.sleep(1);
 }

@@ -8,7 +8,6 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import rabbitcore.rabbit.spring_amqp.config.RabbitDeclare;
 import rabbitcore.rabbit.spring_amqp.entity.User;
 
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @desc 消息发送与接收
  * @createTime 2018-12-18-16:51
  */
-@Component
+//@Component
 public class SpringProducer {
     private static final Logger LOG = Logger.getLogger(SpringProducer.class);
     @Autowired

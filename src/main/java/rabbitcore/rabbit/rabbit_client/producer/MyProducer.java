@@ -21,9 +21,9 @@ public class MyProducer {
     private static final String EXCHANGE_NAME = "rc_exchange";
     private static final String ROUTING_KEY = "routingkey_rc";
     private static final String QUEUE_NAME = "rc_queue";
-    private static final String IP_ADDRESS = "ycrabbitmq.dc.zz";
+    private static final String IP_ADDRESS = "localhost";
     private static final Integer PORT = 5672;
-    private static final String VIRTUAL_Host = "yunce";
+    private static final String VIRTUAL_Host = "/";
     private static SortedSet<Long> confiemSet = Collections.synchronizedSortedSet(new TreeSet<>());
 
     /**
@@ -81,8 +81,9 @@ public class MyProducer {
         ConnectionFactory factory = new ConnectionFactory();
         try {
             // uri格式: amqp:username:password@ipAddress:portNumber/virtualHost
-            LOG.info("amqp://admin:admin@+" + IP_ADDRESS + ":" + PORT + "/" + VIRTUAL_Host);
-            factory.setUri("amqp://admin:admin@" + IP_ADDRESS + ":" + PORT + "/" + VIRTUAL_Host);
+            LOG.info("amqp://admin:admin@" + IP_ADDRESS + ":" + PORT + "/");
+            factory.setUri("amqp://admin:admin@" + IP_ADDRESS + ":" + PORT + "/");
+            factory.setVirtualHost(VIRTUAL_Host);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -123,9 +124,10 @@ public class MyProducer {
                 headers.put("author", "zxx");
                 headers.put("email", "1139835238@qq.com");
 
-                AMQP.BasicProperties mybasicProperties = new AMQP.BasicProperties().builder().deliveryMode(2) // 传送方式
+                AMQP.BasicProperties mybasicProperties = new AMQP.BasicProperties().builder()
+                        .deliveryMode(2) // 2 持久化
                         .contentEncoding("UTF-8") // 编码方式
-                        //.expiration("20000") // 过期时间
+                        .expiration("5000") // 过期时间
                         .headers(headers) //自定义属性
                         .timestamp(new Date())
                         .build();
@@ -142,7 +144,7 @@ public class MyProducer {
                 //消息编号
                 confiemSet.add(nextSeqNo);
             }
-            LOG.info("发送结果 成功delivery ：" + confiemSet);
+            LOG.info("发送结果 成功delivery ：" + confiemSet.toString());
            /* //删除信道，队列 返回确定值
             AMQP.Exchange.DeleteOk exchangeIndex = channel.exchangeDelete(EXCHANGE_NAME,true);
             AMQP.Queue.DeleteOk queueIndex = channel.queueDelete(QUEUE_NAME,true,true);

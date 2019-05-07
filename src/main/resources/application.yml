@@ -2,7 +2,8 @@ ex:
   EXCHANGE_NAME: spring_rb_exchange
   QUEUE_NAME: spring_rb_queue
   ROUNTING_KEY: spring
-  IP_ADDRESS: ycrabbitmq.dc.zz
+  #  IP_ADDRESS: ycrabbitmq.dc.zz
+  IP_ADDRESS: localhost
 queue:
   QUEUE_NAME: spring_rb_queue
   ROUNTING_KEY: spring
@@ -10,11 +11,18 @@ spring:
   rabbitmq:
     username: admin
     password: admin
-    virtual-host: yunce
+    #    virtual-host: yunce
+    virtual-host: /
     publisher-returns: true
     publisher-confirms: true
     template:
       mandatory: true
-    host: ycrabbitmq.dc.zz
+    #    host: ycrabbitmq.dc.zz
+    host: localhost
+    listener:
+      direct:
+        acknowledge-mode: manual
+      simple:
+        acknowledge-mode: manual
 logging:
   file: /logs/log.log

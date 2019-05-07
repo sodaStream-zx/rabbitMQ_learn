@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author 一杯咖啡
- * @desc
+ * @desc 交换机，队列 绑定
  * @createTime 2018-12-20-0:28
  */
 @Configuration
@@ -54,6 +54,7 @@ public class BindConfig {
         return QueueBuilder.durable(DELAY_MESSAGE)
                 .withArgument("x-dead-letter-exchange", DLX_EXCHANGE)
                 .withArgument("x-dead-letter-routing-key", NOMAL_KEY)
+                .withArgument("x-message-ttl", 5000)
                 .build();
     }
 

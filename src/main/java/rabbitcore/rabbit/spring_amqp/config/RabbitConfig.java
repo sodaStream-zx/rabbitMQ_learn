@@ -7,7 +7,6 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import rabbitcore.rabbit.spring_amqp.config.messageUtils.MyMessageHandler;
 
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import java.util.Map;
  * @desc rabbitmq 工具配置
  * @createTime 2018-12-16-15:22
  */
-@Configuration
+//@Configuration
 public class RabbitConfig {
     private Logger LOG = Logger.getLogger(RabbitConfig.class);
     @Value("${ex.EXCHANGE_NAME}")
