@@ -13,16 +13,7 @@ spring:
     password: admin
     #    virtual-host: yunce
     virtual-host: /
-    publisher-returns: true
-    publisher-confirms: true
-    template:
-      mandatory: true
     #    host: ycrabbitmq.dc.zz
     host: localhost
-    listener:
-      direct:
-        acknowledge-mode: manual
-      simple:
-        acknowledge-mode: manual
 logging:
   file: /logs/log.log
