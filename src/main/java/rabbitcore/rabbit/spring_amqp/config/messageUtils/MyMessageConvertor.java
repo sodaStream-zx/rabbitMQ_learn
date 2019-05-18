@@ -1,6 +1,7 @@
 package rabbitcore.rabbit.spring_amqp.config.messageUtils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.MessageConversionException;
@@ -12,7 +13,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
  * @createTime 2018-12-19-16:11
  */
 public class MyMessageConvertor implements MessageConverter {
-    private static final Logger LOG = Logger.getLogger(MyMessageHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MyMessageHandler.class);
 
     @Override
     public Message toMessage(Object o, MessageProperties messageProperties) throws MessageConversionException {

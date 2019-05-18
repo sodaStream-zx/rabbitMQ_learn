@@ -47,7 +47,7 @@ public class ProProducer {
             rabbitTemplate.send("WaiteExchange", "waite", message, new CorrelationData(UUID.randomUUID().toString()));
             log.warn("发送消息到rabbit");
             count++;
-            PauseUtil.pause(2);
+            PauseUtil.pause(2, 0);
         }
     }
 }

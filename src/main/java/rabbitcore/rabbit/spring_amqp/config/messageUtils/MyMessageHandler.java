@@ -1,6 +1,7 @@
 package rabbitcore.rabbit.spring_amqp.config.messageUtils;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import java.util.Map;
  * @createTime 2018-12-19-11:08
  */
 public class MyMessageHandler {
-    private static final Logger LOG = Logger.getLogger(MyMessageHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MyMessageHandler.class);
 
     public void handleMessage(byte[] message) {
         LOG.info("-------------handleMessage byte[]------------\n" + new String(message));

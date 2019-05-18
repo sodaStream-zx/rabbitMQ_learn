@@ -22,11 +22,15 @@ import java.util.stream.IntStream;
 @EnableRabbit
 public class RabbitApplication implements ApplicationRunner {
 
-    @Autowired
+
     private ConnectionFactory connectionFactory;
+    private ProProducer proProducer;
 
     @Autowired
-    private ProProducer proProducer;
+    public RabbitApplication(ConnectionFactory connectionFactory, ProProducer proProducer) {
+        this.connectionFactory = connectionFactory;
+        this.proProducer = proProducer;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(RabbitApplication.class, args);
@@ -50,6 +54,12 @@ public class RabbitApplication implements ApplicationRunner {
         factory.setMaxConcurrentConsumers(5);
         factory.setConcurrentConsumers(5);
         factory.setPrefetchCount(1);
+//        RetryTemplate retryTemplate = new RetryTemplate();
+//        RabbitProperties.Retry retry = new RabbitProperties.Retry();
+//        retry.setEnabled(true);
+//        retry.setMaxAttempts(1);
+//        retry.setMaxInterval(Duration.ofMinutes(1));
+//        factory.setRetryTemplate();
         return factory;
     }
 }

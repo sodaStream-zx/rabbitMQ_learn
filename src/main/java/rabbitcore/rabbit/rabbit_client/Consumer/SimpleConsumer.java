@@ -1,7 +1,8 @@
 package rabbitcore.rabbit.rabbit_client.Consumer;
 
 import com.rabbitmq.client.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeoutException;
  * @createTime 2018-12-16-3:46
  */
 public class SimpleConsumer {
-    private static final Logger LOG = Logger.getLogger(SimpleConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleConsumer.class);
 
     private static final String EXCHANGE_NAME = "simple_exchange";
     private static final String ROUTING_KEY = "simple_key";

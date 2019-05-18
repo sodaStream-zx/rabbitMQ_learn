@@ -1,7 +1,8 @@
 package rabbitcore.rabbit.spring_amqp.spring_consumer;
 
 import com.rabbitmq.client.Channel;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Headers;
@@ -20,7 +21,7 @@ import java.util.Map;
 @Component
 //@RabbitListener(queues = "spring_rb_queue1")
 public class AnnatotionConusmer {
-    private static final Logger LOG = Logger.getLogger(AnnatotionConusmer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AnnatotionConusmer.class);
 
     /*@RabbitHandler
     public void revicer2(Message message) {

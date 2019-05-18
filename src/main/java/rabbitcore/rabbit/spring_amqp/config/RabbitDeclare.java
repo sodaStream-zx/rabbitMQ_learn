@@ -1,6 +1,7 @@
 package rabbitcore.rabbit.spring_amqp.config;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Component
 public class RabbitDeclare {
 
-    private static final Logger LOG = Logger.getLogger(RabbitDeclare.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RabbitDeclare.class);
     @Value("${ex.EXCHANGE_NAME}")
     private String EXCHANGE_NAME;
     @Value("${queue.QUEUE_NAME}")

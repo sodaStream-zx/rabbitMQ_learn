@@ -4,7 +4,8 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeoutException;
  * @createTime 2018-12-16-3:28
  */
 public class SimpleProducer {
-    private static final Logger LOG = Logger.getLogger(SimpleProducer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleProducer.class);
     private static final String EXCHANGE_NAME = "simple_exchange";
     private static final String ROUTING_KEY = "simple_key";
     private static final String QUEUE_NAME = "simple_queue";
@@ -117,7 +118,7 @@ public class SimpleProducer {
 
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20, 200, TimeUnit.MILLISECONDS,
                 new ArrayBlockingQueue<>(5));
         //线程池满，直接在调用线程中执行该任务

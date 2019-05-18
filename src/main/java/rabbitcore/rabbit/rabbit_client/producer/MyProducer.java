@@ -1,7 +1,8 @@
 package rabbitcore.rabbit.rabbit_client.producer;
 
 import com.rabbitmq.client.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeoutException;
  * @createTime 2018-12-15-0:44
  */
 public class MyProducer {
-    private static final Logger LOG = Logger.getLogger(MyProducer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MyProducer.class);
     private static final String EXCHANGE_NAME = "rc_exchange";
     private static final String ROUTING_KEY = "routingkey_rc";
     private static final String QUEUE_NAME = "rc_queue";

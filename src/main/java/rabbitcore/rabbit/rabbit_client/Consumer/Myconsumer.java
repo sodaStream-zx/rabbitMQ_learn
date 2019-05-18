@@ -1,7 +1,8 @@
 package rabbitcore.rabbit.rabbit_client.Consumer;
 
 import com.rabbitmq.client.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -16,7 +17,7 @@ public class Myconsumer {
     private static final String QUEUE_NAME = "simple_queue";
     private static final String IP_ADDRESS = "ycrabbitmq.dc.zz";
     private static Integer PORT = 5672;
-    private static final Logger LOG = Logger.getLogger(Myconsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Myconsumer.class);
 
     public static void main(String[] args) throws IOException, TimeoutException {
         //建立连接信息

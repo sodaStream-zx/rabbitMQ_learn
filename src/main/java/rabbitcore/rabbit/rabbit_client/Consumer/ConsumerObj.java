@@ -1,7 +1,8 @@
 package rabbitcore.rabbit.rabbit_client.Consumer;
 
 import com.rabbitmq.client.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @createTime 2018-12-16-22:08
  */
 public class ConsumerObj implements Consumer {
-    private static final Logger LOG = Logger.getLogger(ConsumerObj.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConsumerObj.class);
     private Integer counter = 0;
     private Channel channel;
 

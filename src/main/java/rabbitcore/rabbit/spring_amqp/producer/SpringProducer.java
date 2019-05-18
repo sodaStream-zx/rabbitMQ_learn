@@ -2,7 +2,8 @@ package rabbitcore.rabbit.spring_amqp.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,8 +11,7 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import rabbitcore.rabbit.spring_amqp.config.RabbitDeclare;
 import rabbitcore.rabbit.spring_amqp.entity.User;
-
-import java.util.concurrent.TimeUnit;
+import rabbitcore.rabbit.utils.PauseUtil;
 
 /**
  * @author 一杯咖啡
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 //@Component
 public class SpringProducer {
-    private static final Logger LOG = Logger.getLogger(SpringProducer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SpringProducer.class);
     @Autowired
     private RabbitTemplate rabbitTemplate;
     @Autowired
@@ -49,7 +49,7 @@ public class SpringProducer {
                 rabbitTemplate.convertAndSend(message);
                 //rabbitTemplate.send(message);
                 LOG.info("发送消息 =======》》" + message.toString() + "\n");
-                pause(1, 0);
+                PauseUtil.pause(1, 0);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -61,15 +61,5 @@ public class SpringProducer {
         LOG.info("\n发送消息完成，开始接收消息\n");
         // pause(5, 0);
         simpleMessageListenerContainer.start();
-    }
-
-    //休眠方法
-    public void pause(int seconds, int mills) {
-        try {
-            TimeUnit.SECONDS.sleep(seconds);
-            TimeUnit.MILLISECONDS.sleep(mills);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
