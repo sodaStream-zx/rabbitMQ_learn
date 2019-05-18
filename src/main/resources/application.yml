@@ -16,4 +16,5 @@ spring:
     #    host: ycrabbitmq.dc.zz
     host: localhost
 logging:
-  file: /logs/log.log
+  file: logs/log.log
+  level.root: warn

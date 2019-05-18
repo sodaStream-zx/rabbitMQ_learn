@@ -13,6 +13,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import rabbitcore.rabbit.TimeOutQueue.ProProducer;
 
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+
 @SpringBootApplication
 @EnableRabbit
 public class RabbitApplication implements ApplicationRunner {
@@ -31,7 +36,9 @@ public class RabbitApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         // springProducer.sendMessage();
         //springProducer.reciveMessage();
-        proProducer.sendMessage();
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 500, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(10));
+        IntStream.range(0, 5).forEach(value -> threadPoolExecutor.execute(() -> proProducer.sendMessage()));
+
     }
 
     @Bean(value = "manualFactory")
@@ -40,8 +47,8 @@ public class RabbitApplication implements ApplicationRunner {
         factory.setConnectionFactory(connectionFactory);
         //默认的确认模式是AcknowledgeMode.AUTO
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
-        factory.setMaxConcurrentConsumers(1);
-        factory.setConcurrentConsumers(1);
+        factory.setMaxConcurrentConsumers(5);
+        factory.setConcurrentConsumers(5);
         factory.setPrefetchCount(1);
         return factory;
     }
