@@ -113,7 +113,7 @@ public class SimpleProducer {
             } else {
                 LOG.info("send message successed");
             }
-//            TimeUnit.MILLISECONDS.sleep(20);
+            TimeUnit.MILLISECONDS.sleep(15);
         }
 
     }
@@ -122,7 +122,7 @@ public class SimpleProducer {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20, 200, TimeUnit.MILLISECONDS,
                 new ArrayBlockingQueue<>(5));
         //线程池满，直接在调用线程中执行该任务
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 4; i++) {
             executor.submit(() -> {
                 try {
                     publishMessage();

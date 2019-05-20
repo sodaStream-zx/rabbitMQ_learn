@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -45,14 +46,14 @@ public class Myconsumer {
                 if (message != null) {
                     LOG.info("\n1 .message == " + new String(message.getBody())
                             + "\n ------------------  ");
+                    channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
                 }
                 if (message2 != null) {
                     LOG.info("2.message2 == " + new String(message2.getBody()));
+                    channel.basicAck(message2.getEnvelope().getDeliveryTag(), false);
                 }
                 //mutiple = true 确定此条消息前所有消息。
-                channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
-//                channel.basicAck(message2.getEnvelope().getDeliveryTag(), false);
-//                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.MILLISECONDS.sleep(3);
             }
             //运行basicconsume 后直接关闭连接。会直接关闭消息获取。
 //            LOG.info("消息未获取到 或者已到最大获取数");
@@ -63,6 +64,8 @@ public class Myconsumer {
         } catch (TimeoutException e) {
             e.printStackTrace();
             LOG.info("shudown2");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             channel.close();
             connection.close();
