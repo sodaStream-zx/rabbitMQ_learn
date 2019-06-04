@@ -1,6 +1,7 @@
 package rabbitcore.rabbit.TimeOutQueue;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -9,7 +10,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import rabbitcore.rabbit.utils.PauseUtil;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -27,28 +27,33 @@ public class ProProducer {
     private RabbitTemplate rabbitTemplate;
 
     public void sendMessage() {
-        rabbitTemplate.setMandatory(true);
+        rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) ->
+                System.out.println(message.toString() + " " + replyCode + replyText + exchange + routingKey));
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) ->
+                System.out.println(correlationData.toString() + ack + cause));
         int count = 1;
-        while (true) {
-            //正常消息设置超时时间
-            News news = new News();
-            news.setId(1L);
-            news.setAuthor("zxx" + count);
-            news.setTitle("这是标题" + count);
-            news.setContent("dasdasdasdasdasdwvsd" + count);
-            news.setSource("四川" + count);
-            news.setTime(LocalDateTime.now());
-            String jsonString = JSON.toJSONString(news);
-            Message message = MessageBuilder.withBody(jsonString.getBytes())
-                    .setExpiration(String.valueOf(1000 * 60L))
-                    .setTimestamp(new Date())
-                    .setContentType("application/json")
-                    .build();
-            rabbitTemplate.send("WaiteExchange", "waite", message, new CorrelationData(UUID.randomUUID().toString()));
-            log.warn("发送消息到rabbit");
-            count++;
-            PauseUtil.pause(2, 0);
-        }
+        //正常消息设置超时时间
+        News news = new News();
+        news.setId(1L);
+        news.setAuthor("zxx" + count);
+        news.setTitle("这是标题" + count);
+        news.setContent("dasdasdasdasdasdwvsd" + count);
+        news.setSource("四川" + count);
+        news.setTime(LocalDateTime.now());
+        String jsonString = JSON.toJSONString(news, SerializerFeature.PrettyFormat);
+        Message message = MessageBuilder.withBody(jsonString.getBytes())
+                .setAppId("this is appID")
+                .setCorrelationId(UUID.randomUUID().toString())
+                .setContentEncoding("utf8")
+                .setType("this type")
+                .setUserId("admin")
+                .setExpiration(String.valueOf(1000 * 60L))
+                .setTimestamp(new Date())
+                .setContentType("application/json")
+                .build();
+
+        rabbitTemplate.send(BindDelayConfig.waiteExchange, BindDelayConfig.waiteKey, message, new CorrelationData(UUID.randomUUID().toString()));
+        log.warn("发送消息到rabbit");
     }
 }
 

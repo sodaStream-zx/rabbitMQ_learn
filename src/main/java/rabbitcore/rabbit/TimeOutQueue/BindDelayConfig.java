@@ -12,16 +12,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BindDelayConfig {
     //等待队列
-    private static final String waiteQueue = "WaiteQueue";
+    public static final String waiteQueue = "waiteQueue";
     //监听队列
-    private static final String TimeOutQueue = "timeOutQueue";
+    public static final String TimeOutQueue = "timeOutQueue";
 
     //等待交换机
-    private static final String waiteExchange = "waiteExchange";
-    private static final String waiteKey = "waite";
+    public static final String waiteExchange = "waiteExchange";
+    public static final String waiteKey = "waite";
     //死信交换机
-    private static final String TimeOutExchange = "TimeOutExchange";
-    private static final String timeOutKey = "timeout";
+    public static final String TimeOutExchange = "timeOutExchange";
+    public static final String timeOutKey = "timeout";
 
     @Bean
     public DirectExchange waiteExchange() {

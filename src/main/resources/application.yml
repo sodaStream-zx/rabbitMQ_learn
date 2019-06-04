@@ -15,9 +15,15 @@ spring:
     virtual-host: /
     #    host: ycrabbitmq.dc.zz
     host: localhost
+    publisher-confirms: true
+    publisher-returns: true
+  application:
+    name: rabbitdemo
 logging:
   file: logs/log.log
-  level.root: warn
+  level.root: info
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{10} - %msg%n'
     file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{10} - %msg%n'
+server:
+  port: 8066

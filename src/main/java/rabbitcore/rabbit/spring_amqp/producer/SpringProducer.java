@@ -21,12 +21,16 @@ import rabbitcore.rabbit.utils.PauseUtil;
 //@Component
 public class SpringProducer {
     private static final Logger LOG = LoggerFactory.getLogger(SpringProducer.class);
-    @Autowired
     private RabbitTemplate rabbitTemplate;
-    @Autowired
     private RabbitDeclare rabbitDeclare;
-    @Autowired
     private SimpleMessageListenerContainer simpleMessageListenerContainer;
+
+    @Autowired
+    public SpringProducer(RabbitTemplate rabbitTemplate, RabbitDeclare rabbitDeclare, SimpleMessageListenerContainer simpleMessageListenerContainer) {
+        this.rabbitTemplate = rabbitTemplate;
+        this.rabbitDeclare = rabbitDeclare;
+        this.simpleMessageListenerContainer = simpleMessageListenerContainer;
+    }
 
     //发送消息
     public void sendMessage() {

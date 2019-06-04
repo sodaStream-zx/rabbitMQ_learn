@@ -23,8 +23,7 @@ public class ProReciver {
     private static final Logger LOG = LoggerFactory.getLogger(ProReciver.class);
 
 
-    //    @RabbitListener(queues = "nomal_queue")
-    @RabbitListener(queues = "timeOutRealIdQueue", concurrency = "1", containerFactory = "manualFactory")
+    @RabbitListener(queues = BindDelayConfig.TimeOutQueue, concurrency = "1", containerFactory = "manualFactory")
     public void handleMeaage(Message message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
         channel.basicQos(1);
         String text = new String(message.getBody());
