@@ -38,15 +38,7 @@ public class SimpleProducer {
         try {
             factory.setUri(uri);
             connection = factory.newConnection("simple 生产者");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
+        } catch (IOException | TimeoutException | NoSuchAlgorithmException | KeyManagementException | URISyntaxException e) {
             e.printStackTrace();
         }
         return connection;
@@ -126,9 +118,7 @@ public class SimpleProducer {
             executor.submit(() -> {
                 try {
                     publishMessage();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             });
